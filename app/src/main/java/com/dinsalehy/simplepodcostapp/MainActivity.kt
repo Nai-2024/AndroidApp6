@@ -6,11 +6,15 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
@@ -29,15 +33,75 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import coil.compose.rememberAsyncImagePainter
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            val viewModel: PodcastViewModel = viewModel() // Get the ViewModel instance
-            PodcastApp(viewModel) // Pass the ViewModel to the PodcastApp Composable
+            val navController = rememberNavController()
+            val viewModel: PodcastViewModel = viewModel()
+
+            NavHost(navController = navController, startDestination = "landing") {
+                composable("landing") {
+                    LandingPage(onStartClick = {
+                        navController.navigate("main")
+                    })
+                }
+                composable("main") {
+                    PodcastApp(viewModel = viewModel)
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun LandingPage(onStartClick: () -> Unit) {
+    Column(modifier = Modifier
+        .fillMaxSize()
+        .background(Color(0xFFEDE7F6))
+        .padding(24.dp),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+
+    ) {
+
+        // Welcome text
+        Text(
+            text = "🎧 Welcome to Nai PodCast!",
+            style = MaterialTheme.typography.headlineMedium,
+            modifier = Modifier.padding(vertical = 24.dp)
+        )
+
+        // Welcome image (use any URL or local drawable)
+        Image(
+            painter = rememberAsyncImagePainter(R.drawable.podcost),
+            contentDescription = "Podcast image",
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(300.dp)
+                .clip(RoundedCornerShape(6.dp))
+                .align(androidx.compose.ui.Alignment.CenterHorizontally),
+            contentScale = ContentScale.Crop
+        )
+
+        // Start button
+        Button(
+            onClick = onStartClick,
+            modifier = Modifier
+                .padding(top = 32.dp)
+                .align(androidx.compose.ui.Alignment.CenterHorizontally)
+        ) {
+            Text("Start Exploring Podcasts")
         }
     }
 }
