@@ -1,23 +1,5 @@
-<<<<<<< HEAD
-*.iml
-.gradle
-/local.properties
-/.idea/caches
-/.idea/libraries
-/.idea/modules.xml
-/.idea/workspace.xml
-/.idea/navEditor.xml
-/.idea/assetWizardSettings.xml
-.DS_Store
-/build
-/captures
-.externalNativeBuild
-.cxx
-local.properties
-=======
 # Object file
 *.o
 
 # Ada Library Information
 *.ali
->>>>>>> 9b8c468fce0d162f13f7dde252fcefa26436050f
